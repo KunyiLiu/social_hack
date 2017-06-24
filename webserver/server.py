@@ -231,7 +231,7 @@ def add_a(username):
 
   cmd = 'INSERT INTO activity_post VALUES (%s, %s, %s, timestamp %s, %s,%s,%s);'
 
-  g.conn.execute(cmd,(aid, catagory, title, date, username,location,description))
+  g.conn.execute(cmd,(aid, catagory, title, time, username,location,description))
 
   return render_template('actsus.html',username=username)
 
