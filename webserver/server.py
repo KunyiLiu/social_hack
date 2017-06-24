@@ -219,8 +219,22 @@ if __name__ == "__main__":
     print ("running on %s:%d" % (HOST, PORT))
     app.run(host=HOST, port=PORT, debug=debug, threaded=threaded)
 
-
-
+#friendlist
+@app.route('/friendlist/<username>')
+def list(username):
+  cursor=g.conn.execute("select user_ID from Person where username=%s;",username)
+  uid=cursor.first()[0]
+  cursor=g.conn.execute("select * from friendlist where user_id=%s;",uid)
+  friends=cursor.first()
+  if friends==None:
+    update_time=''
+    friendlist=''
+    a=['Please update']
+  else:
+    update_time=friends[1]
+    friendlist=friends[2]
+    a=friendlist.split(',')
+  return render_template("friendlist.html",**locals())
 
 
   run()
