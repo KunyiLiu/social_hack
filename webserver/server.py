@@ -190,6 +190,90 @@ def job_posted(username):
       jobs.append(b1)
   return render_template("staff_post.html",**locals())
 
+#post new activity
+
+@app.route('/staff/<username>/postactivity',methods=['POST'])
+
+def add_a(username):
+
+  cursor=g.conn.execute("select staff_ID from Staff where name=%s;",username)
+
+  sid=cursor.first()[0]
+
+  catagory=request.form['type']
+
+  title=request.form['title']
+
+  location=request.form['place']
+
+  description=request.form['description']
+
+  time=(request.form['time'])
+
+
+  #new job_id
+
+  record1 = g.conn.execute("select max(aid) from activity_post where staffname=%s;",username)
+
+  aid0=record1.first()[0]
+
+  if aid0==None:
+
+    sid=100*sid+1
+
+  else: 
+
+    aid=aid0+1
+
+  #time=g.conn.execute("select current_date;")
+
+  #updatetime=time.first()[0]
+
+  cmd = 'INSERT INTO activity_post VALUES (%s, timestamp %s, %s, %s, %s,%s,%s);'
+
+  g.conn.execute(cmd,(aid, category, title, date, username,location,description))
+
+  return render_template('actsus.html',username=username)
+
+
+
+           
+
+#delete activity
+
+@app.route('/staff/<username>/deleteactivity',methods=['POST'])
+
+def delete_a(username):
+
+  cursor=g.conn.execute("select staff_ID from Staff where name=%s;",username)
+
+  sid=cursor.first()[0]
+
+  deljid= request.form['deljid']
+
+  g.conn.execute("delete from job_posted where staffname=%s and aid=%s;",(username,deljid))
+
+  return render_template('actsus.html',username=username)
+
+
+#friendlist
+@app.route('/friendlist/<username>')
+def list(username):
+  cursor=g.conn.execute("select user_ID from Person where username=%s;",username)
+  uid=cursor.first()[0]
+  cursor=g.conn.execute("select * from friendlist where user_id=%s;",uid)
+  friends=cursor.first()
+  if friends==None:
+    update_time=''
+    friendlist=''
+    a=['Please update']
+  else:
+    update_time=friends[1]
+    friendlist=friends[2]
+    a=friendlist.split(',')
+  return render_template("friendlist.html",**locals())
+
+
 
 
 
@@ -219,22 +303,6 @@ if __name__ == "__main__":
     print ("running on %s:%d" % (HOST, PORT))
     app.run(host=HOST, port=PORT, debug=debug, threaded=threaded)
 
-#friendlist
-@app.route('/friendlist/<username>')
-def list(username):
-  cursor=g.conn.execute("select user_ID from Person where username=%s;",username)
-  uid=cursor.first()[0]
-  cursor=g.conn.execute("select * from friendlist where user_id=%s;",uid)
-  friends=cursor.first()
-  if friends==None:
-    update_time=''
-    friendlist=''
-    a=['Please update']
-  else:
-    update_time=friends[1]
-    friendlist=friends[2]
-    a=friendlist.split(',')
-  return render_template("friendlist.html",**locals())
 
 
   run()
