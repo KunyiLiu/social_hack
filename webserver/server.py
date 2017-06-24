@@ -251,7 +251,7 @@ def delete_a(username):
 
   deljid= request.form['deljid']
 
-  g.conn.execute("delete from job_posted where staffname=%s and aid=%s;",(username,deljid))
+  g.conn.execute("delete from activity_post where staffname=%s and aid=%s;",(username,deljid))
 
   return render_template('actsus.html',username=username)
 
