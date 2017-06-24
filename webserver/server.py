@@ -186,7 +186,7 @@ def job_posted(username):
     jobs = []
     jidlist=[]
     for result in s:
-      b1 = (result[2],result[1],result[3],'')
+      b1 = (result[2],result[1],result[3],result[6])
       jobs.append(b1)
   return render_template("staff_post.html",**locals())
 
