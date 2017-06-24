@@ -229,7 +229,7 @@ def add_a(username):
 
   #updatetime=time.first()[0]
 
-  cmd = 'INSERT INTO activity_post VALUES (%s, timestamp %s, %s, %s, %s,%s,%s);'
+  cmd = 'INSERT INTO activity_post VALUES (%s, %s, %s, timestamp %s, %s,%s,%s);'
 
   g.conn.execute(cmd,(aid, catagory, title, date, username,location,description))
 
