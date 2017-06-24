@@ -178,8 +178,7 @@ def profile_s(username):
 def job_posted(username):
   cursor=g.conn.execute("select * from activity_post where staffname=%s;",username)
   s=cursor.fetchall()
-  cursor.close()
-  if s==None:
+  cursor.close()  if s==None:
     jobs =''
     jidlist=''
   else:
@@ -219,7 +218,7 @@ def add_a(username):
 
   if aid0==None:
 
-    sid=100*sid+1
+    aid=100*sid+1
 
   else: 
 
